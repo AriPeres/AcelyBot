@@ -26,8 +26,7 @@ const levelSchema = new Schema({
         default: "unknown",
     },
     testDate: {
-        type: String,
-        default: "unknown",
+        type: Date,
     }
 });
 

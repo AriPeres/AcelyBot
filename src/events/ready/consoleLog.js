@@ -1,4 +1,5 @@
-const {ActivityType} = require('discord.js')
+const {ActivityType} = require('discord.js');
+const scheduleSend = require('../schedulers/scheduleSend');
 
 module.exports = (client) => {
     console.log(`${client.user.tag} is online :)`);
@@ -7,5 +8,8 @@ module.exports = (client) => {
         name: "Doing",
         type: ActivityType.Custom,
         state: "SAT | ACT Prep"
-    })
+    });
+
+
+    scheduleSend(client);
 };

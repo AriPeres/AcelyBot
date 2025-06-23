@@ -29,6 +29,32 @@ module.exports = {
     callback: async (client, interaction) => {
         await interaction.deferReply({flags: MessageFlags.Ephemeral});
 
+        const dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{2}$/;
+
+        const dateInput = interaction.options.getString("date");
+
+        if (!dateRegex.test(dateInput)) {
+          return interaction.editReply({
+            content: "❌ Invalid date format. Please use `MM/DD/YY` (e.g. `03/05/26`).",
+            flags: MessageFlags.Ephemeral
+          });
+        }
+
+        // Convert to full date: MM/DD/20YY
+        const [month, day, year] = dateInput.split('/');
+        const fullYear = parseInt(year) + 2000;
+        const date = new Date(`${fullYear}-${month}-${day}`);
+
+        // Final validation check
+        if (isNaN(date.getTime())) {
+          return interaction.editReply({
+            content: "❌ That date couldn't be parsed. Please double-check the format.",
+            flags: MessageFlags.Ephemeral
+          });
+        }
+
+
+
         const query = {
             userId: interaction.user.id,
             username: interaction.user.username,
@@ -54,7 +80,7 @@ module.exports = {
 
 
         interaction.editReply({
-            content: `Test: ${level.test}\nDate: ${level.testDate}`,
+            content: `Test: ${level.test}\nDate: ${interaction.options.getString("date")}`,
             flags: MessageFlags.Ephemeral
         }
     );

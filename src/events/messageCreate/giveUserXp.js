@@ -2,7 +2,7 @@ const { Client, Message } = require('discord.js');
 const calculateLevelXp = require('../../utils/calculateLevel');
 const Level = require('../../models/Level');
 const cooldowns = new Set();
-const cooldownTime = 1;
+const cooldownTime = 10000;
 
 // Currently engaged - date of last message
 // Lose xp or access to a channel if haven't been engaged for 3 months
@@ -17,9 +17,9 @@ function getXp() {
  * @param {Message} message
  */
 module.exports = async (client, message) => {
-    if (cooldowns.has(message.author.id)) {
-        message.reply("On Cooldown");
-    }
+    // if (cooldowns.has(message.author.id)) {
+    //     message.reply("On Cooldown");
+    // }
     if (!message.inGuild() || message.author.bot || cooldowns.has(message.author.id)) return;
     // console.log("Received a message");
     const xpToGive = getXp();
@@ -29,6 +29,7 @@ module.exports = async (client, message) => {
         username: message.author.username,
         guildId: message.guild.id,
     };
+
 
     try {
         const level = await Level.findOne(query);
@@ -71,6 +72,7 @@ module.exports = async (client, message) => {
                 username: message.author.username,
                 guildId: message.guild.id,
                 xp: 0,
+                // testDate: "unknown",
             });
 
             await newLevel.save();

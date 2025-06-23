@@ -22,9 +22,14 @@ module.exports = {
         if (!level) {
             interaction.editReply("You do not have any test info");
         };
-            
+          
+        const date = new Date(level.testDate);
+        const readableDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/` +
+                     `${date.getDate().toString().padStart(2, '0')}/` +
+                     `${date.getFullYear()}`;
+
         interaction.editReply({
-            content: `Test: ${level.test}\nDate: ${level.testDate}`,
+            content: `Test: ${level.test}\nDate: ${readableDate}`,
             flags: MessageFlags.Ephemeral
         }
     );
